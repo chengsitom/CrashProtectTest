@@ -13,13 +13,12 @@
 @implementation ForwardingTarget
 
 id ForwardingTarget_dynamicMethod(id self, SEL _cmd) {
-//    return [NSNull null];
-    return @"sssssssssss";
+    return [NSNull null];
 }
 
 
 + (BOOL)resolveInstanceMethod:(SEL)sel {
-//    class_addMethod(self.class, sel, (IMP)ForwardingTarget_dynamicMethod, "@@:");
+    class_addMethod(self.class, sel, (IMP)ForwardingTarget_dynamicMethod, "@@:");
     [super resolveInstanceMethod:sel];
     return YES;
 }

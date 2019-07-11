@@ -7,13 +7,14 @@
 //
 
 #import "NSObject+DoesNotRecognizeSelectorExtension.h"
-
+#import <UIKit/UIKit.h>
 #import <objc/runtime.h>
 #import "ForwardingTarget.h"
 
 static ForwardingTarget *_target = nil;
 
 @implementation NSObject (DoesNotRecognizeSelectorExtension)
+
 
 + (void)load {
     static dispatch_once_t onceToken;
@@ -29,9 +30,9 @@ static ForwardingTarget *_target = nil;
     if (isInternal) {
         return NO;
     }
+    BOOL isMyClass  = [classString isEqualToString:@"ViewController"];
     BOOL isNull =  [classString isEqualToString:NSStringFromClass([NSNull class])];
-    
-    BOOL isMyClass  = [classString isEqualToString:NSStringFromClass([NSArray class])];
+
     return isNull || isMyClass;
 }
 
@@ -40,6 +41,7 @@ static ForwardingTarget *_target = nil;
     if (result) {
         return result;
     }
+    
     BOOL isWhiteListClass = [[self class] isWhiteListClass:[self class]];
     if (!isWhiteListClass) {
         return nil;
@@ -48,6 +50,8 @@ static ForwardingTarget *_target = nil;
     if (!result) {
         result = _target;
     }
+    NSLog(@"crashLog:%@-%@",NSStringFromClass([self class]),NSStringFromSelector(aSelector));
+
     return result;
 }
 
@@ -71,5 +75,6 @@ BOOL not_recognize_selector_classMethodSwizzle(Class aClass, SEL originalSelecto
     }
     return YES;
 }
+ 
 
 @end
